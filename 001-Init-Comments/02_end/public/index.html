@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html ng-app="formationangularjs">
+<head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/comments.css">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <a class="navbar-brand">Formation AngularJS</a>
+    </div>
+</nav>
+
+<div class="container" ng-controller="topicController">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ topic.title }}</h3>
+        </div>
+        <div class="panel-body">
+            {{ topic.text }}
+        </div>
+    </div>
+
+    <!-- Formulaire d'envoie de commentaire -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Envoi de Commentaire</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" novalidate role="form" name="formComment" ng-submit="addComment()">
+                <div class="form-group"
+                     ng-class="{ 'has-error': formComment.login.$touched && formComment.login.$invalid }">
+                    <label for="Login" class="col-sm-2 control-label">Login</label>
+
+                    <div class="col-sm-10">
+                        <input
+                                class="form-control"
+                                id="Login" name="login" ng-model="newComment.login" placeholder="Login" ng-minlength="3"
+                                ng-maxlength="12" ng-required="true"
+                                ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }">
+                    </div>
+
+                    <div class="help-block col-sm-offset-3" ng-messages="formComment.login.$error"
+                         ng-show="formComment.login.$touched">
+                        <p ng-message="minlength">Your name is too short.</p>
+
+                        <p ng-message="maxlength">Your name is too long.</p>
+
+                        <p ng-message="required">Your name is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group"
+                     ng-class="{ 'has-error': formComment.comment.$touched && formComment.comment.$invalid }">
+                    <label for="Comment" class="col-sm-2 control-label">Comment</label>
+
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="Comment" name="comment" ng-model="newComment.text"
+                                  placeholder="Comment" ng-required="true"></textarea>
+                    </div>
+                    <div class="help-block col-sm-offset-3" ng-messages="formComment.comment.$error"
+                         ng-show="formComment.comment.$touched">
+                        <p ng-message="required">Your comment is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" ng-disabled="formComment.$invalid" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default widget">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-comment"></span>
+
+            <h3 class="panel-title">Recent Comments</h3>
+            <span class="label label-info">{{ listComments.length }}</span>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="comment in listComments | orderBy:'-date'">
+                    <div class="row">
+                        <div class="col-xs-10 col-md-11">
+                            <div>
+                                <div class="action pull-right">
+                                    <button ng-click="deleteComment(comment)" type="button"
+                                            class="btn btn-danger btn-xs" title="Delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </div>
+                                <div class="mic-info">
+                                    By: <a>{{ comment.login | uppercase }}</a> on {{ comment.date | date:'medium'}}
+                                </div>
+                            </div>
+                            <div class="comment-text">
+                                {{ comment.text }}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-messages.js"></script>
+
+    <script type="text/javascript">
+        angular.module('formationangularjs', [
+            'ngMessages'
+        ])
+                .controller('topicController', topicController)
+                .factory('commentService', commentService);
+
+        function topicController($scope, commentService) {
+            $scope.newComment = {};
+            $scope.listComments = [];
+            $scope.loading = false;
+            $scope.topic = {title: 'Title1', text: 'text of title 1'};
+
+            $scope.addComment = function addComment() {
+                $scope.newComment.date = Date.now();
+
+                commentService
+                        .save($scope.newComment)
+                        .then(addInList);
+
+                resetCommentForm();
+            };
+
+            $scope.deleteComment = function deleteComment(comment) {
+                $scope.listComments.splice($scope.listComments.indexOf(comment), 1);
+            };
+
+            function resetCommentForm() {
+                $scope.newComment = {};
+                $scope.formComment.$setUntouched(true);
+                $scope.formComment.$setPristine(true);
+            }
+
+            function addInList(comment) {
+                $scope.listComments.push(comment);
+            }
+
+        }
+
+        function commentService($q) {
+            return {
+                save: save
+            };
+
+            function save(comment) {
+                return $q.when(angular.copy(comment));
+            }
+        }
+    </script>
+</body>
+</html>
