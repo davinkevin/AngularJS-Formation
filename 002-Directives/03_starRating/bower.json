@@ -1,0 +1,56 @@
+{
+  "name": "Bet-Manager",
+  "version": "1.0.0",
+  "dependencies": {
+    "angular": "1.4.4",
+    "angular-messages": "1.4.4",
+    "bootstrap": "~3.3.5"
+  },
+  "overrides": {
+    "jquery": {
+      "main": {
+        "dev": "",
+        "prod": ""
+      }
+    },
+    "angular": {
+      "main": {
+        "dev": "angular.js",
+        "prod": [
+          "angular.min.js",
+          "angular.min.js.map"
+        ]
+      }
+    },
+    "angular-messages": {
+      "main": {
+        "dev": "angular-messages.js",
+        "prod": [
+          "angular-messages.min.js",
+          "angular-messages.min.js.map"
+        ]
+      }
+    },
+    "bootstrap": {
+      "main": {
+        "dev": [
+          "./dist/css/bootstrap.css",
+          "./dist/fonts/glyphicons-halflings-regular.eot",
+          "./dist/fonts/glyphicons-halflings-regular.svg",
+          "./dist/fonts/glyphicons-halflings-regular.ttf",
+          "./dist/fonts/glyphicons-halflings-regular.woff",
+          "./dist/fonts/glyphicons-halflings-regular.woff2"
+        ],
+        "prod": [
+          "./dist/css/bootstrap.min.css",
+          "./dist/css/bootstrap.css.map",
+          "./dist/fonts/glyphicons-halflings-regular.eot",
+          "./dist/fonts/glyphicons-halflings-regular.svg",
+          "./dist/fonts/glyphicons-halflings-regular.ttf",
+          "./dist/fonts/glyphicons-halflings-regular.woff",
+          "./dist/fonts/glyphicons-halflings-regular.woff2"
+        ]
+      }
+    }
+  }
+}
