@@ -44,9 +44,7 @@
                     <div class="help-block col-sm-offset-3" ng-messages="formComment.login.$error"
                          ng-show="formComment.login.$touched">
                         <p ng-message="minlength">Your name is too short.</p>
-
                         <p ng-message="maxlength">Your name is too long.</p>
-
                         <p ng-message="required">Your name is required.</p>
                     </div>
                 </div>
@@ -120,7 +118,6 @@
         function topicController($scope, commentService) {
             $scope.newComment = {};
             $scope.listComments = [];
-            $scope.loading = false;
             $scope.topic = {title: 'Title1', text: 'text of title 1'};
 
             $scope.addComment = function addComment() {
@@ -139,8 +136,8 @@
 
             function resetCommentForm() {
                 $scope.newComment = {};
-                $scope.formComment.$setUntouched(true);
-                $scope.formComment.$setPristine(true);
+                $scope.formComment.$setUntouched();
+                $scope.formComment.$setPristine();
             }
 
             function addInList(comment) {
