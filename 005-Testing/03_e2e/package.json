@@ -44,6 +44,10 @@
   },
   "scripts": {
     "prestart": "npm install",
-    "start": "gulp watch --env dev"
+    "start": "gulp watch --env dev",
+    "pretest": "gulp",
+    "test": "karma start karma.conf.js --single-run --reporters coverage",
+    "tdd": "karma start karma.conf.js",
+    "protractor": "protractor protractor_conf.js"
   }
 }
