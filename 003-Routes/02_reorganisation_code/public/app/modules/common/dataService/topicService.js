@@ -29,13 +29,13 @@ function topicService($timeout) {
 
   function findAll() {
     return $timeout(function() {
-      return resolve(_.cloneDeep(self.topics));
+      return _.cloneDeep(self.topics);
     }, 1000);
   }
 
   function findById(id) {
     return $timeout(function() {
-      return resolve(_.cloneDeep(_.findWhere(self.topics, function(e) { return e.id === parseInt(id);}) ) );
+      return _.cloneDeep(_.findWhere(self.topics, function(e) { return e.id === parseInt(id);}) );
     }, 1000);
   }
 }

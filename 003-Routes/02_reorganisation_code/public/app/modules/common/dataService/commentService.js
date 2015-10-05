@@ -56,13 +56,13 @@ function commentService($timeout, $q, Restangular) {
 
     function findByTopic(topicId) {
       return  $timeout(function() {
-        return resolve(_.filter(self.comments, function(e) { return e.topicId === parseInt(topicId); }));
+        return _.filter(self.comments, function(e) { return e.topicId === parseInt(topicId); });
       }, 1000);
     }
 
     function save(comment) {
       return $timeout(function() {
-          return resolve(self.comments.push(angular.copy(comment)));
+          return self.comments.push(angular.copy(comment));
         }, 1000);
     }
 
