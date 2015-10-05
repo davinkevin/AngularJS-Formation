@@ -1,0 +1,93 @@
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ tc.topic.title }}</h3>
+        </div>
+        <div class="panel-body">
+            {{ tc.topic.text }}
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Envoi de Commentaire</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form" name="formComment" ng-submit="tc.addComments()">
+                <div class="form-group" ng-class="{ 'has-error': tc.formComment.login.$touched && tc.formComment.login.$invalid }">
+                    <label for="Login" class="col-sm-2 control-label">Login</label>
+                    <div class="col-sm-10">
+                        <input
+                                class="form-control"
+                                id="Login" name="login" ng-model="tc.newComment.login" placeholder="Login" ng-minlength="3" ng-maxlength="12" ng-required="true" ng-model-options="{ updateOn: 'default blur', debounce: { default: 750, blur: 0 } }">
+                    </div>
+
+                    <div class="help-block col-sm-offset-3" ng-messages="tc.formComment.login.$error" ng-show="tc.formComment.login.$touched">
+                        <p ng-message="minlength">Your name is too short.</p>
+                        <p ng-message="maxlength">Your name is too long.</p>
+                        <p ng-message="required">Your name is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <star-rating note="tc.newComment.note" max="10"></star-rating>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error': tc.formComment.comment.$touched && tc.formComment.comment.$invalid }">
+                    <label for="Comment" class="col-sm-2 control-label">Comment</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="Comment" name="comment" ng-model="tc.newComment.text" placeholder="Comment" ng-required="true"></textarea>
+                    </div>
+                    <div class="help-block col-sm-offset-3" ng-messages="tc.formComment.comment.$error" ng-show="tc.formComment.comment.$touched">
+                        <p ng-message="required">Your comment is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" ng-disabled="tc.formComment.$invalid" class="btn btn-primary" >
+                            <span is-loading="tc.loading" aria-hidden="true"></span> Send
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default widget">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-comment"></span>
+            <h3 class="panel-title">Recent Comments</h3>
+            <span class="label label-info">{{ tc.listComments.length }}</span>
+
+        </div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="comment in tc.listComments | orderBy:'-date'">
+                    <div class="row">
+                        <div class="col-xs-10 col-md-11">
+                            <div>
+                                <div class="action pull-right">
+                                    <button ng-click="tc.deleteComment(comment)" type="button" class="btn btn-danger btn-xs" title="Delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </div>
+                                <div class="mic-info">
+                                    By: <a>{{ comment.login | uppercase }}</a> on {{ comment.date | date:'medium'}}
+                                </div>
+                            </div>
+                            <div class="comment-text">
+                                {{ comment.text }}
+                            </div>
+                            <star-rating note="comment.note" max="10" readonly></star-rating>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

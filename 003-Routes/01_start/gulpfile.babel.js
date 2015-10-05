@@ -116,7 +116,7 @@ gulp.task('inject', ['bower-install'], () => {
             ignorePath: "/bower_components/",
             addPrefix: 'app/lib'
         }))
-        .pipe(inject(gulp.src(appFiles).pipe(rename({suffix: min})), {addRootSlash: false, name: 'app'}))
+        .pipe(inject(gulp.src(appFiles).pipe(rename({suffix : min})), {addRootSlash : false, ignorePath : "/public/", name: 'app'}))
         .pipe(cachebust({type: 'MD5'}))
         .pipe(gulp.dest(staticLocation))
         .pipe(connect.reload());
