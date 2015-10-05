@@ -1,0 +1,13 @@
+<!--
+<ul class="rating">
+    <li ng-repeat="star in stars" ng-class="star">
+        ★
+    </li>
+</ul>
+-->
+
+<ul class="rating">
+    <li ng-repeat="star in src.stars" ng-class="star" ng-click="src.changeNote($index+1)"
+        class="glyphicon glyphicon-star">
+    </li>
+</ul>
