@@ -2,12 +2,12 @@
 <html ng-app="formationangularjs">
 <head>
     <!-- inject:css -->
-    <link rel="stylesheet" href="app/lib/bootstrap/dist/css/bootstrap.css?hash=863e18d60a680b92372b69c412aa3fb5">
+    <link rel="stylesheet" href="app/lib/bootstrap/dist/css/bootstrap.css?hash=8f2b14ee8bb40dc0efc0f5b3a03fd917">
     <!-- endinject -->
 
     <!-- app:css -->
     <link rel="stylesheet"
-          href="css/comments.css?hash=9c60427d0152fe6b647d53074864bef0?hash=1aba3707e881fd3340668e3b0ab4441a?hash=5fd8ce373cbbcce59a9f9876ff0fd62b?hash=41b7419f11a03c04e3fd214c2600117e?hash=b14dc3e6250a34820ad442d678628066?hash=3a76aab358192227b862827ce2ce4f85?hash=dd70beef58c773fd2153362a3f3cdb96?hash=92e9b491455f175dd9b493d7c7470312">
+          href="css/comments.css?hash=9c60427d0152fe6b647d53074864bef0?hash=1aba3707e881fd3340668e3b0ab4441a?hash=5fd8ce373cbbcce59a9f9876ff0fd62b?hash=41b7419f11a03c04e3fd214c2600117e?hash=b14dc3e6250a34820ad442d678628066?hash=3a76aab358192227b862827ce2ce4f85?hash=dd70beef58c773fd2153362a3f3cdb96?hash=6deacdaf2375d96b65115089011ab3d0?hash=5480426c422a9ea6055ac88ad3ae3880">
     <!-- endinject -->
 </head>
 <body>
@@ -54,6 +54,12 @@
                         <p ng-message="maxlength">Your name is too long.</p>
 
                         <p ng-message="required">Your name is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <star-rating note="newComment.note" max="10"></star-rating>
                     </div>
                 </div>
 
@@ -109,6 +115,7 @@
                             <div class="comment-text">
                                 {{ comment.text }}
                             </div>
+                            <star-rating note="comment.note" max="10" readonly></star-rating>
                         </div>
                     </div>
                 </li>
@@ -118,8 +125,8 @@
 
 
     <!-- inject:js -->
-    <script src="app/lib/angular/angular.js?hash=6ea9e34e192ca99f24c2858ed40e3db6"></script>
-    <script src="app/lib/angular-messages/angular-messages.js?hash=b0b74fa78544dbb56fe79f10cfebff38"></script>
+    <script src="app/lib/angular/angular.js?hash=4fba6201c5b750e9cf97f8b54431d238"></script>
+    <script src="app/lib/angular-messages/angular-messages.js?hash=f5748a4b1921a712e9ea96616e0a1c7b"></script>
     <!-- endinject -->
 
     <script type="text/javascript">
@@ -129,10 +136,12 @@
                 .controller('topicController', topicController)
                 .factory('commentService', commentService)
                 .directive('isLoading', isLoadingDirective)
-                .constant('topic', {title: 'Title1', text: 'text of title 1'});
+                .constant('topic', {title: 'Title1', text: 'text of title 1'})
+                .directive('starRating', starRatingDirective)
+                .controller('starRatingController', starRatingController);
 
         function topicController($scope, commentService, topic) {
-            $scope.newComment = {};
+            resetCommentForm();
             $scope.listComments = [];
             $scope.loading = false;
             $scope.topic = topic;
@@ -152,9 +161,11 @@
                 $scope.listComments.splice($scope.listComments.indexOf(comment), 1);
             };
             function resetCommentForm() {
-                $scope.newComment = {};
-                $scope.formComment.$setUntouched(true);
-                $scope.formComment.$setPristine(true);
+                $scope.newComment = {note: 5};
+                if ($scope.formComment) {
+                    $scope.formComment.$setUntouched();
+                    $scope.formComment.$setPristine();
+                }
             }
 
             function stopLoading() {
@@ -184,7 +195,6 @@
                 }
             }
         }
-
         function commentService($timeout) {
             return {
                 save: save,
@@ -198,10 +208,62 @@
             }
 
             function remove(comment) {
-                return $timeout(function () {
+                $timeout(function () {
                     return resolve(angular.copy(comment));
                 }, 3000);
             }
+        }
+
+        function starRatingDirective() {
+            return {
+                controller: 'starRatingController',
+                templateUrl: 'app/partial/starRating.html',
+                scope: true,
+                controllerAs: 'src',
+                bindToController: {
+                    note: '=',
+                    max: '=',
+                    onChange: '&',
+                    readonly: '@'
+                },
+                link: function starRatingLink(_, __, ___, ctrl) {
+                    //ctrl.readOnly = attr.hasOwnProperty('readonly') && (attr.readonly === "" || attr.readonly.toLowerCase() === "true");
+                    ctrl.isReadonly = angular.isDefined(ctrl.readonly) && ( ctrl.readonly === "" || ctrl.readonly.toLowerCase() === "true" );
+                }
+            };
+        }
+        function starRatingController($scope) {
+            var vm = this;
+
+            vm.updateStars = function () {
+                vm.stars = [];
+                for (var i = 0; i < vm.max; i++) {
+                    var state = i < vm.note;
+                    vm.stars.push({filled: state});
+                }
+            };
+
+            vm.changeNote = function (note) {
+                if (vm.isReadonly) {
+                    return;
+                }
+
+                vm.note = vm.note === note ? 0 : note;
+                /*
+                 vm.onChange({note : { note : 12, aCustomValue : "yes"}});
+                 on-change="onChangeNote(note)" ==> note = 12
+                 http://weblogs.asp.net/dwahlin/creating-custom-angularjs-directives-part-3-isolate-scope-and-function-parameters
+                 */
+                (vm.onChange() || angular.noop)(vm.note);
+            };
+
+            $scope.$watch(function () {
+                return vm.note;
+            }, function (newVal) {
+                if (angular.isNumber(newVal)) {
+                    vm.updateStars();
+                }
+            });
         }
     </script>
 </body>
