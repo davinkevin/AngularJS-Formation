@@ -35,7 +35,7 @@ function topicService($timeout) {
 
   function findById(id) {
     return $timeout(function() {
-      return _.cloneDeep(_.findWhere(self.topics, function(e) { return e.id === parseInt(id);}) );
+      return _.cloneDeep(_.findWhere(self.topics, {id: parseInt(id)}));
     }, 1000);
   }
 }
