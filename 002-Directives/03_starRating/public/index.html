@@ -2,12 +2,12 @@
 <html ng-app="formationangularjs">
 <head>
     <!-- inject:css -->
-    <link rel="stylesheet" href="app/lib/bootstrap/dist/css/bootstrap.css?hash=4e681821e64ebe8d864096b82c5b8669">
+    <link rel="stylesheet" href="app/lib/bootstrap/dist/css/bootstrap.css?hash=6536b669f23da6e11d6b48790361efd9">
     <!-- endinject -->
 
     <!-- app:css -->
     <link rel="stylesheet"
-          href="css/comments.css?hash=9c60427d0152fe6b647d53074864bef0?hash=1aba3707e881fd3340668e3b0ab4441a?hash=5fd8ce373cbbcce59a9f9876ff0fd62b?hash=41b7419f11a03c04e3fd214c2600117e?hash=b14dc3e6250a34820ad442d678628066?hash=3a76aab358192227b862827ce2ce4f85?hash=dd70beef58c773fd2153362a3f3cdb96?hash=6deacdaf2375d96b65115089011ab3d0">
+          href="css/comments.css?hash=9c60427d0152fe6b647d53074864bef0?hash=1aba3707e881fd3340668e3b0ab4441a?hash=5fd8ce373cbbcce59a9f9876ff0fd62b?hash=41b7419f11a03c04e3fd214c2600117e?hash=b14dc3e6250a34820ad442d678628066?hash=3a76aab358192227b862827ce2ce4f85?hash=dd70beef58c773fd2153362a3f3cdb96?hash=6deacdaf2375d96b65115089011ab3d0?hash=5480426c422a9ea6055ac88ad3ae3880?hash=a03ceabda7e5c2f080a04315dbbe6937?hash=710b960d1397319d1d1d4efceee0f4a3">
     <!-- endinject -->
 </head>
 <body>
@@ -125,8 +125,8 @@
 
 
     <!-- inject:js -->
-    <script src="app/lib/angular/angular.js?hash=afaf2146099b00982ec174b17a0fd72e"></script>
-    <script src="app/lib/angular-messages/angular-messages.js?hash=6b462bd4ee2b9b09c676c3b3f9f95468"></script>
+    <script src="app/lib/angular/angular.js?hash=10cc26d21ec962b7145c4bb8122ea755"></script>
+    <script src="app/lib/angular-messages/angular-messages.js?hash=4da6ef45c56fab2e4bc38d7b5c729311"></script>
     <!-- endinject -->
 
     <script type="text/javascript">
@@ -140,7 +140,7 @@
                 .directive('starRating', starRatingDirective)
                 .controller('starRatingController', starRatingController);
 
-        function topicController($scope, commentService, topic) {
+        function topicController($scope, commentService, topic, $log) {
             resetCommentForm();
             $scope.listComments = [];
             $scope.loading = false;
@@ -160,6 +160,11 @@
             $scope.deleteComment = function deleteComment(comment) {
                 $scope.listComments.splice($scope.listComments.indexOf(comment), 1);
             };
+
+            $scope.onChangeNote = function (note) {
+                $log.info("Super Message : " + note);
+            };
+
             function resetCommentForm() {
                 $scope.newComment = {note: 5};
                 if ($scope.formComment) {
@@ -249,17 +254,25 @@
                 }
 
                 vm.note = vm.note === note ? 0 : note;
+                
+                // 2 solutions
+                
                 /*
-                 vm.onChange({note : { note : 12, aCustomValue : "yes"}});
-                 on-change="onChangeNote(note)" ==> note = 12
-                 http://weblogs.asp.net/dwahlin/creating-custom-angularjs-directives-part-3-isolate-scope-and-function-parameters
-                 */
-                (vm.onChange() || angular.noop)(vm.note);
+                    JS : vm.onChange({ note : 12 }); // 
+                    HTML : on-change="onChangeNote(note)" //==> note = 12
+                    Desc : Utilisation d'un object literal afin de passer la paramètre, le nom de la variable note est fortement lié !
+                    ==> http://weblogs.asp.net/dwahlin/creating-custom-angularjs-directives-part-3-isolate-scope-and-function-parameters
+                */
+
+                /*
+                 JS : (vm.onChange() || angular.noop)( vm.note )  
+                 HTML : on-change="onChangeNote"
+                 Desc : Récupréation d'une référence vers la function parser par AngularJS, nécessite du currying afin d'être extrait du contexte
+                 ==> http://weblogs.asp.net/dwahlin/creating-custom-angularjs-directives-part-3-isolate-scope-and-function-parameters
+                */
             };
 
-            $scope.$watch(function () {
-                return vm.note;
-            }, function (newVal) {
+            $scope.$watch(function () {return vm.note;}, function (newVal) {
                 if (angular.isNumber(newVal)) {
                     vm.updateStars();
                 }
