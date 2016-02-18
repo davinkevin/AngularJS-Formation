@@ -7,7 +7,8 @@
     "angular-resource": "1.4.4",
     "angular-route": "1.4.4",
     "bootstrap": "~3.3.5",
-    "restangular": "~1.5.1"
+    "restangular": "~1.5.1",
+    "lodash" : "3.10.1"
   },
   "overrides": {
     "jquery": {
