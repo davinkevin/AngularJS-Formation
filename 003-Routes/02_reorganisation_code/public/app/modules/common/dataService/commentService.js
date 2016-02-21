@@ -7,7 +7,7 @@ function commentService($timeout) {
       {
         "id": 2,
         "login": "user1",
-        "comment": "Commentaire n° 2",
+        "text": "Commentaire n° 2",
         "date": 1440875402960,
         "note": 6,
         "topicId": 1
@@ -15,7 +15,7 @@ function commentService($timeout) {
       {
         "id": 3,
         "login": "user1",
-        "comment": "Commentaire n° 3",
+        "text": "Commentaire n° 3",
         "date": 1440875402960,
         "note": 6,
         "topicId": 1
