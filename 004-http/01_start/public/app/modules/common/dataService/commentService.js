@@ -1,15 +1,13 @@
-angular.module('cf.common.dataService.commentService', [
-    'restangular'
-])
+angular.module('cf.common.dataService.commentService', [])
     .factory('commentService', commentService);
 
-function commentService($timeout, $q, Restangular) {
+function commentService($timeout) {
     var self = this;
     self.comments = [
         {
             "id": 2,
             "login": "user1",
-            "comment": "Commentaire n° 2",
+            "text": "Commentaire n° 2",
             "date": 1440875402960,
             "note": 6,
             "topicId": 1
@@ -17,7 +15,7 @@ function commentService($timeout, $q, Restangular) {
         {
             "id": 3,
             "login": "user1",
-            "comment": "Commentaire n° 3",
+            "text": "Commentaire n° 3",
             "date": 1440875402960,
             "note": 6,
             "topicId": 1
@@ -49,31 +47,31 @@ function commentService($timeout, $q, Restangular) {
     ];
 
     return {
-        save: save,
-        remove: remove,
-        findByTopic: findByTopic
+        save : save,
+        remove : remove,
+        findByTopic : findByTopic
     };
 
     function findByTopic(topicId) {
-        return $timeout(function () {
-            return _.filter(self.comments, function (e) {
-                return e.topicId === parseInt(topicId);
-            });
+        return  $timeout(function() {
+            return self.comments.filter(function(c) { return c.topicId === parseInt(topicId); });
         }, 1000);
     }
 
-    function save(comment) {
-        return $timeout(function () {
-            return self.comments.push(angular.copy(comment));
+    function save(topicId, comment) {
+        return $timeout(function() {
+            var copyOfComment = angular.copy(comment);
+            copyOfComment.topicId = topicId;
+            self.comments.push(copyOfComment);
+            return copyOfComment;
         }, 1000);
     }
 
     function remove(comment) {
-        return $timeout(function () {
-            _.remove(self.comments, function (e) {
-                return e.id === parseInt(comment.id);
-            });
-            return resolve();
+        return $timeout(function() {
+            self.comments = self
+                .comments
+                .filter(function(c) { return c.id !== parseInt(comment.id);});
         }, 1000);
     }
 }
