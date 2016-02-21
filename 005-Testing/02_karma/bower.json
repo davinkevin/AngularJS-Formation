@@ -55,18 +55,6 @@
           "./dist/fonts/glyphicons-halflings-regular.woff2"
         ]
       }
-    },
-    "lodash": {
-      "main": {
-        "dev": "lodash.js",
-        "prod": "lodash.min.js"
-      }
-    },
-    "restangular": {
-      "main": {
-        "dev": "dist/restangular.js",
-        "prod": "dist/restangular.min.js"
-      }
     }
   }
 }
