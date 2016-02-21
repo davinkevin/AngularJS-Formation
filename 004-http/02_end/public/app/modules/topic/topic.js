@@ -29,7 +29,7 @@ function topicController(commentService, topic, comments) {
     vm.deleteComment = function (comment) {
         return commentService
             .remove(comment)
-            .then(removeLocally);
+            .then(function() { return removeLocally(comment);});
     };
 
     function removeLocally(comment) {
