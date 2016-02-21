@@ -29,13 +29,13 @@ function topicService($timeout) {
 
   function findAll() {
     return $timeout(function() {
-      return _.cloneDeep(self.topics);
+      return angular.copy(self.topics);
     }, 1000);
   }
 
   function findById(id) {
     return $timeout(function() {
-      return _.cloneDeep(_.findWhere(self.topics, {id: parseInt(id)}));
+      return angular.copy(self.topics.filter(function(topic) { return topic.id === parseInt(id);})[0]);
     }, 1000);
   }
 }

@@ -78,4 +78,7 @@ node_modules
 bower_components
 lib
 
+/**/app/css/*.css
+/**/app/js/*
+
 
