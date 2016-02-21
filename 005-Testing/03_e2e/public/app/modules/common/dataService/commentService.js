@@ -1,11 +1,7 @@
-angular.module('cf.common.dataService.commentService', [
-    'restangular'
-])
+angular.module('cf.common.dataService.commentService', [])
     .factory('commentService', commentService);
 
-function commentService($timeout, $q, Restangular) {
-    var self = this;
-
+function commentService($http) {
     return {
         save: save,
         remove: remove,
@@ -14,22 +10,18 @@ function commentService($timeout, $q, Restangular) {
 
     function save(topicId, comment) {
         comment.topicId = topicId;
-        return $q(function (resolve) {
-            $timeout(function () {
-                return resolve(Restangular.all('comments').post(comment));
-            }, 5000);
-        });
+        return $http.post('/api/comments', comment).then(extractor);
     }
 
     function findByTopic(topicId) {
-        return Restangular.one('topics', topicId).all('comments').getList();
+        return $http.get('/api/topics/' + topicId + '/comments').then(extractor);
     }
 
     function remove(comment) {
-        return Restangular.one('comments', comment.id)
-            .remove()
-            .then(function () {
-                return comment;
-            });
+        return $http.delete('/api/comments/' + comment.id);
+    }
+
+    function extractor(r) {
+        return r.data;
     }
 }

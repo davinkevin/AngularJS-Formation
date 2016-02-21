@@ -1,11 +1,10 @@
 angular.module('cf.topic', [
-    'cf.common.dataService.commentService',
-    'cf.common.dataService.topicService',
-    'cf.common.components.starRating',
-    'cf.common.components.isLoading',
-    'ngRoute',
-    'ngMessages'
-])
+        'cf.common.dataService.commentService',
+        'cf.common.dataService.topicService',
+        'cf.common.components.starRating',
+        'cf.common.components.isLoading',
+        'ngRoute'
+    ])
     .config(topicRouteConfig)
     .controller('topicController', topicController);
 
@@ -30,7 +29,7 @@ function topicController(commentService, topic, comments) {
     vm.deleteComment = function (comment) {
         return commentService
             .remove(comment)
-            .then(removeLocally);
+            .then(function() { return removeLocally(comment);});
     };
 
     function removeLocally(comment) {
@@ -54,17 +53,17 @@ function topicController(commentService, topic, comments) {
 
 function topicRouteConfig($routeProvider) {
     $routeProvider.
-        when('/topics/:id', {
-            templateUrl: 'topic/topic.html',
-            controller: 'topicController',
-            controllerAs: 'tc',
-            resolve: {
-                topic: function topic(topicService, $route) {
-                    return topicService.findById($route.current.params.id);
-                },
-                comments: function commentsOnTopic(commentService, $route) {
-                    return commentService.findByTopic($route.current.params.id);
-                }
+    when('/topics/:id', {
+        templateUrl: 'topic/topic.html',
+        controller: 'topicController',
+        controllerAs: 'tc',
+        resolve: {
+            topic: function topic(topicService, $route) {
+                return topicService.findById($route.current.params.id);
+            },
+            comments: function commentsOnTopic(commentService, $route) {
+                return commentService.findByTopic($route.current.params.id);
             }
-        });
+        }
+    });
 }

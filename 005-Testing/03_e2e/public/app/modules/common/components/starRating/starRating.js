@@ -20,7 +20,7 @@ function starRatingDirective() {
                     return ctrl.note;
                 },
                 function () {
-                    ctrl.updateStars()
+                    ctrl.updateStars();
                 }
             );
         }
