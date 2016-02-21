@@ -1,17 +1,21 @@
 angular.module('cf.common.dataService.topicService', [])
     .factory('topicService', topicService);
 
-function topicService(Restangular) {
+function topicService($http) {
     return {
         findById: findById,
         findAll: findAll
     };
 
     function findAll() {
-        return Restangular.all('topics').getList();
+        return $http.get('/api/topics').then(extractor);
     }
 
     function findById(id) {
-        return Restangular.one('topics', id).get();
+        return $http.get('/api/topics/' + id).then(extractor);
+    }
+
+    function extractor(r) {
+        return r.data;
     }
 }

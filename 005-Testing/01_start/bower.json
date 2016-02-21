@@ -6,8 +6,7 @@
     "angular-messages": "1.4.4",
     "angular-resource": "1.4.4",
     "angular-route": "1.4.4",
-    "bootstrap": "~3.3.5",
-    "restangular": "~1.5.1"
+    "bootstrap": "~3.3.5"
   },
   "overrides": {
     "jquery": {
@@ -53,18 +52,6 @@
           "./dist/fonts/glyphicons-halflings-regular.woff",
           "./dist/fonts/glyphicons-halflings-regular.woff2"
         ]
-      }
-    },
-    "lodash": {
-      "main": {
-        "dev": "lodash.js",
-        "prod": "lodash.min.js"
-      }
-    },
-    "restangular": {
-      "main": {
-        "dev": "dist/restangular.js",
-        "prod": "dist/restangular.min.js"
       }
     }
   }
