@@ -23,7 +23,7 @@ class topicController {
     deleteComment(comment) {
         return this.commentService
             .remove(comment)
-            .then(this.removeLocally);
+            .then(() => this.removeLocally(comment));
     }
 
     removeLocally(comment) {

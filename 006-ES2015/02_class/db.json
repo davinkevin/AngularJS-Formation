@@ -50,36 +50,12 @@
       "id": 18
     },
     {
-      "note": 9,
-      "login": "faefef",
-      "text": "aefae",
-      "date": 1444075662588,
+      "note": 5,
+      "login": "kevin",
+      "text": "comment",
+      "date": 1456063242944,
       "topicId": 1,
       "id": 19
-    },
-    {
-      "note": 9,
-      "login": "afefae",
-      "text": "feaeaf",
-      "date": 1444075860580,
-      "topicId": 1,
-      "id": 20
-    },
-    {
-      "note": 9,
-      "login": "afafee",
-      "text": "efaefa",
-      "date": 1444075989504,
-      "topicId": 1,
-      "id": 21
-    },
-    {
-      "note": 10,
-      "login": "fafaef",
-      "text": "aaa",
-      "date": 1444076233811,
-      "topicId": 1,
-      "id": 22
     }
   ]
 }

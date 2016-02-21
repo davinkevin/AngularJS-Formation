@@ -40,14 +40,16 @@
     "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "*",
     "karma-teamcity-reporter": "^0.1.2",
-    "protractor": "*"
+    "protractor": "2.5.1"
   },
   "scripts": {
-    "prestart": "npm install",
+    "postinstall" : "webdriver-manager update",
+    "preparee2e" : "npm run web-driver & npm start &",
     "start": "gulp watch --env dev",
     "pretest": "gulp",
     "test": "karma start karma.conf.js --single-run --reporters coverage",
     "tdd": "karma start karma.conf.js",
+    "web-driver" : "webdriver-manager start",
     "protractor": "protractor protractor_conf.js"
   }
 }
